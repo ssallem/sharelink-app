@@ -4,6 +4,7 @@
 
 - 📖 **사용 설명서 / 원리 / 크로스플랫폼:** https://ssallem.github.io/sharelink-app/
 - ⬇️ **Windows 클라이언트 다운로드:** https://github.com/ssallem/sharelink-app/releases/latest/download/ShareLink.exe
+- ⬇️ **Android 앱(APK) 다운로드:** https://github.com/ssallem/sharelink-app/releases/latest/download/ShareLink.apk
 
 이 저장소는 공개 안내 페이지(`index.html`)와 릴리스 바이너리만 담습니다.
 
