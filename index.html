@@ -256,6 +256,7 @@
   .phone{position:relative;aspect-ratio:720/1407;border-radius:28px;background:#0B0B10;padding:8px;box-shadow:var(--sh-card);cursor:zoom-in;transition:transform .15s ease,box-shadow .15s ease}
   .phone:hover,.phone:focus-within{transform:translateY(-3px);box-shadow:var(--sh-hover)}
   .phone img,.phone video{display:block;width:100%;height:100%;border-radius:22px;object-fit:cover;object-position:top;background:#0B0B10}
+  .shots video::-webkit-media-controls{display:none!important}
   .zoom{position:absolute;top:auto;bottom:16px;right:16px;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:rgba(11,11,16,.62);color:#fff;
     display:grid;place-items:center;cursor:zoom-in;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transition:opacity .15s ease,background .15s ease}
   .phone:hover .zoom,.phone:focus-within .zoom{opacity:1}
@@ -651,7 +652,7 @@
         <li class="shot">
           <figure>
             <div class="phone">
-              <video autoplay muted loop playsinline preload="metadata" poster="assets/app_start-poster.jpg" src="assets/app_start.mp4" width="720" height="1406" aria-label="패킷 흐름과 속도 표시가 실시간으로 움직이는 5초 반복 무음 영상"></video>
+              <video autoplay muted loop playsinline preload="auto" disablepictureinpicture poster="assets/app_start-poster.jpg" src="assets/app_start.mp4" width="720" height="1406" aria-label="패킷 흐름과 속도 표시가 실시간으로 움직이는 5초 반복 무음 영상"></video>
               <button type="button" class="zoom" aria-label="확대: 실시간 트래픽 애니메이션"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></button>
             </div>
             <figcaption><b>실시간 트래픽 애니메이션</b><span>패킷 흐름과 속도 표시가 실시간으로 움직이는 모습입니다 (5초 반복, 무음).</span></figcaption>
@@ -810,12 +811,18 @@
 
   // Gallery lightbox (native dialog element; silently inert where showModal is unsupported)
   (function () {
-    // prefers-reduced-motion: no GIF-style autoplay — show controls, stay paused
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      [].forEach.call(document.querySelectorAll('.shots video[autoplay]'), function (v) {
-        v.removeAttribute('autoplay'); v.setAttribute('controls', ''); v.pause();
-      });
-    }
+    // Inline gallery video: always loop silently. Nudge play() for strict autoplay policies.
+    var gv = [].slice.call(document.querySelectorAll('.shots video'));
+    function nudge(v) { v.muted = true; v.loop = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    function nudgeAll() { gv.forEach(function (v) { if (v.paused) nudge(v); }); }
+    gv.forEach(function (v) {
+      nudge(v);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting && v.paused) nudge(v); }); }, { threshold: .1 }).observe(v);
+      }
+    });
+    document.addEventListener('pointerdown', nudgeAll, { once: true });
+
     var lb = document.getElementById('lightbox');
     if (!lb || typeof lb.showModal !== 'function') return;
     var shots = [].slice.call(document.querySelectorAll('.shots .shot'));
@@ -871,6 +878,7 @@
       clear();
       document.body.style.overflow = '';
       if (opener) opener.focus();
+      nudgeAll();
     });
   })();
 </script>
