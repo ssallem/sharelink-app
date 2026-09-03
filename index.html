@@ -253,8 +253,14 @@
   /* ---------- v3: Screens gallery ---------- */
   .shots{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin:32px 0 0;padding:0}
   .shot figure{margin:0}
-  .phone{aspect-ratio:720/1407;border-radius:28px;background:#0B0B10;padding:8px;box-shadow:var(--sh-card)}
+  .phone{position:relative;aspect-ratio:720/1407;border-radius:28px;background:#0B0B10;padding:8px;box-shadow:var(--sh-card);cursor:zoom-in;transition:transform .15s ease,box-shadow .15s ease}
+  .phone:hover,.phone:focus-within{transform:translateY(-3px);box-shadow:var(--sh-hover)}
   .phone img,.phone video{display:block;width:100%;height:100%;border-radius:22px;object-fit:cover;object-position:top;background:#0B0B10}
+  .phone video{cursor:auto}
+  .zoom{position:absolute;top:16px;right:16px;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:rgba(11,11,16,.62);color:#fff;
+    display:grid;place-items:center;cursor:zoom-in;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:background .15s}
+  .zoom svg{width:18px;height:18px}
+  .zoom:hover{background:var(--violet)}
   .shot figcaption{margin-top:12px;padding:0 4px}
   .shot figcaption b{display:block;font-weight:600;color:var(--ink);font-size:.95rem;line-height:1.4}
   .shot figcaption span{display:block;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
@@ -262,6 +268,7 @@
   @media (max-width:760px){
     .shots{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:16px;margin:32px -24px 0;padding:4px 24px 12px}
     .shot{flex:0 0 min(72vw,300px);scroll-snap-align:center}
+    .zoom{width:44px;height:44px}
   }
   @media (max-width:440px){.shots{margin:32px -18px 0;padding:4px 18px 12px}}
 
@@ -273,11 +280,33 @@
   .how-steps .ib{font-weight:800;font-size:1.15rem}
   .how-steps h4{font-size:1.05rem;font-weight:800;margin-bottom:10px}
   .how-steps code{white-space:nowrap}
+  .how-steps p{font-size:15px;line-height:1.6}
   .how-steps p,.how-steps h4,.card p,.note,.shots figcaption{word-break:keep-all;overflow-wrap:break-word}
   .how-acc-violet{--acc:var(--brand)}
   .how-n-blue{background:#EFF6FF;color:#1E40AF}
   @media (max-width:960px){.how-steps{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:760px){.how-steps{grid-template-columns:1fr}}
+
+  /* ---------- v3.1: Lightbox (native dialog element) ---------- */
+  .lb{border:0;padding:0;margin:0;width:100%;height:100%;max-width:none;max-height:none;background:transparent;color:#fff}
+  .lb[open]{display:grid;place-items:center}
+  .lb::backdrop{background:rgba(10,10,20,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  body:has(.lb[open]){overflow:hidden}
+  .lb figure{margin:0;display:flex;flex-direction:column;align-items:center;animation:lb-in .18s ease}
+  .lb img,.lb video{display:block;max-height:88vh;max-width:92vw;object-fit:contain;border-radius:24px;background:#0B0B10}
+  .lb figcaption{margin-top:14px;max-width:92vw;text-align:center;word-break:keep-all}
+  .lb figcaption b{display:block;font-weight:700;font-size:1rem}
+  .lb figcaption span{display:block;font-size:.9rem;color:rgba(255,255,255,.72);margin-top:4px;line-height:1.5}
+  .lb button{position:absolute;width:44px;height:44px;padding:0;border:1px solid rgba(255,255,255,.25);border-radius:50%;
+    background:rgba(255,255,255,.14);color:#fff;font:400 30px/1 var(--sans);cursor:pointer;display:grid;place-items:center;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .15s}
+  .lb button:hover{background:rgba(255,255,255,.28)}
+  .lb :focus-visible{outline-color:#fff}
+  .lb-x{top:16px;right:16px}
+  .lb-prev,.lb-next{top:50%;transform:translateY(-50%)}
+  .lb-prev{left:16px}.lb-next{right:16px}
+  @keyframes lb-in{from{opacity:0;transform:scale(.97)}}
+  @media (prefers-reduced-motion:reduce){.lb figure{animation:none}}
 </style>
 </head>
 <body>
@@ -440,23 +469,23 @@
       <ol class="how-steps">
         <li class="card lift fc acc-green">
           <span class="ib" aria-hidden="true">1</span>
-          <h4>폰이 Wi-Fi Direct 핫스팟을 엽니다</h4>
-          <p>폰 앱이 Wi-Fi Direct API(<code>createGroup</code>)로 그룹 소유자(GO)가 되어 <code>DIRECT-SL-…</code> WPA2 핫스팟(legacy 그룹, 일반 AP처럼 비콘 송출)을 엽니다. PC는 보통 Wi-Fi처럼 접속합니다.</p>
+          <h4>폰이 핫스팟을 엽니다</h4>
+          <p>Wi-Fi Direct로 <code>DIRECT-SL-…</code>를 열고, PC는 일반 Wi-Fi처럼 접속합니다.</p>
         </li>
         <li class="card lift fc acc-blue">
           <span class="ib" aria-hidden="true">2</span>
           <h4>폰 앱이 프록시를 엽니다</h4>
-          <p><code>192.168.49.1</code>에서 HTTP CONNECT(8282)·<wbr>SOCKS5(8283) 프록시를 엽니다. SOCKS5는 RFC 1928 CONNECT(TCP 중계)와 UDP ASSOCIATE(UDP 중계 명령)를 지원해 DNS·QUIC도 받습니다.</p>
+          <p><code>192.168.49.1</code>에서 HTTP 8282·SOCKS5 8283 프록시가 대기합니다.</p>
         </li>
         <li class="card lift fc how-acc-violet">
           <span class="ib" aria-hidden="true">3</span>
-          <h4>PC는 투명 터널로 전부 보냅니다</h4>
-          <p><code>ShareLink.exe</code>는 <code>tun2socks</code>(IP 패킷→SOCKS5 변환 엔진)를 내장하고 <code>wintun</code> 어댑터(10.7.0.2)에 기본 경로 0.0.0.0/0 → 10.7.0.1(metric 1)을 잡습니다. PC 전체 TCP/UDP가 SOCKS5로 가고 DNS(8.8.8.8)도 UDP로 터널되어 DoH(DNS over HTTPS)가 필요 없습니다.</p>
+          <h4>PC 전체 트래픽을 터널로</h4>
+          <p><code>ShareLink.exe</code>가 PC의 모든 TCP/UDP와 DNS를 SOCKS5로 보냅니다.</p>
         </li>
         <li class="card lift fc acc-pink">
           <span class="ib" aria-hidden="true">4</span>
-          <h4>셀룰러 소켓으로 재발신합니다</h4>
-          <p>셀룰러 전용 Network(<code>requestNetwork</code>)에 요청마다 소켓 단위로 개별 바인딩(프로세스 전체가 아님)합니다. 폰 앱의 일반 데이터로 나가며 IPv4를 우선합니다.</p>
+          <h4>폰이 셀룰러로 재발신</h4>
+          <p>폰 앱이 요청마다 셀룰러 소켓으로 다시 내보냅니다(IPv4 우선).</p>
         </li>
       </ol>
 
@@ -573,7 +602,7 @@
           <p><code>ShareLink.exe</code>를 실행하고 트레이에서 켜기만 하면, PC의 <strong>전체 TCP/UDP 트래픽</strong>이 프록시 설정 없이 폰 데이터로 흐릅니다.</p>
           <ul class="checks">
             <li><code>tun2socks</code> 내장 — 앱마다 프록시를 설정할 필요가 없습니다.</li>
-            <li>DNS와 QUIC까지 터널되므로 <strong>별도의 DoH 설정이 불필요</strong>합니다.</li>
+            <li>DNS와 QUIC까지 터널되므로 <strong>별도의 DoH(DNS over HTTPS) 설정이 불필요</strong>합니다.</li>
             <li>IPv6는 지원하지 않습니다(터널은 IPv4만 처리). IPv6 우선 사이트는 느려질 수 있습니다.</li>
           </ul>
         </article>
@@ -593,6 +622,7 @@
           <figure>
             <div class="phone">
               <video controls muted playsinline preload="none" poster="assets/app_start-poster.jpg" src="assets/app_start.mp4" width="720" height="1406" aria-label="ShareLink 앱을 시작하고 핫스팟을 켜는 5초 무음 화면 녹화"></video>
+              <button type="button" class="zoom" aria-label="확대: 앱 시작 → 핫스팟 켜기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></button>
             </div>
             <figcaption><b>앱 시작 → 핫스팟 켜기 (5초, 무음)</b><span>시작 버튼을 누르면 Wi-Fi Direct 핫스팟이 열립니다.</span></figcaption>
           </figure>
@@ -601,6 +631,7 @@
           <figure>
             <div class="phone">
               <img src="assets/shot-1.jpg" width="720" height="1407" loading="lazy" decoding="async" alt="연결 완료 대기 화면 — LIVE 표시, SSID DIRECT-SL-Hotspot과 암호, HTTP 192.168.49.1:8282·SOCKS5 8283 복사 행, 연결 기기 1대, 트래픽 0 B/s">
+              <button type="button" class="zoom" aria-label="확대: 연결 완료, 대기 중"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></button>
             </div>
             <figcaption><b>연결 완료, 대기 중</b><span>SSID·암호·프록시 주소를 한 화면에서 복사. 연결 기기 1, 0 B/s.</span></figcaption>
           </figure>
@@ -609,6 +640,7 @@
           <figure>
             <div class="phone">
               <img src="assets/shot-2.jpg" width="720" height="1407" loading="lazy" decoding="async" alt="PC 통신 시작 화면 — 녹색 게이지와 패킷 점 흐름, 업로드 186 B/s, 다운로드 903 B/s">
+              <button type="button" class="zoom" aria-label="확대: PC 통신 시작"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></button>
             </div>
             <figcaption><b>PC 통신 시작</b><span>게이지가 녹색으로 바뀌고 패킷이 흐릅니다. UP 186 B/s · DOWN 903 B/s.</span></figcaption>
           </figure>
@@ -617,6 +649,7 @@
           <figure>
             <div class="phone">
               <img src="assets/shot-3.jpg" width="720" height="1407" loading="lazy" decoding="async" alt="실시간 속도 그래프 화면 — 업로드 28.1 KB/s, 다운로드 58.4 KB/s 스파크라인">
+              <button type="button" class="zoom" aria-label="확대: 실시간 속도 그래프"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></button>
             </div>
             <figcaption><b>실시간 속도 그래프</b><span>UP 28.1 KB/s · DOWN 58.4 KB/s 스파크라인.</span></figcaption>
           </figure>
@@ -625,6 +658,7 @@
           <figure>
             <div class="phone">
               <img src="assets/shot-4.jpg" width="576" height="1126" loading="lazy" decoding="async" alt="SSID·포트 설정 화면(CONFIG) — SSID 접미사, 암호, HTTP·SOCKS 포트 입력란과 ‘실행 중에는 설정을 바꿀 수 없습니다’ 안내">
+              <button type="button" class="zoom" aria-label="확대: SSID·포트 설정"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></button>
             </div>
             <figcaption><b>SSID·포트 설정</b><span>SSID 접미사·암호·HTTP/SOCKS 포트. 실행 중에는 변경할 수 없습니다.</span></figcaption>
           </figure>
@@ -744,6 +778,13 @@
   </div>
 </footer>
 
+<dialog id="lightbox" class="lb" aria-label="확대 보기">
+  <button type="button" class="lb-x" aria-label="닫기">×</button>
+  <button type="button" class="lb-prev" aria-label="이전 화면">‹</button>
+  <button type="button" class="lb-next" aria-label="다음 화면">›</button>
+  <figure><figcaption></figcaption></figure>
+</dialog>
+
 <script>
   // Copy endpoint values to clipboard (minimal, event-delegated)
   document.addEventListener('click', function (e) {
@@ -763,6 +804,62 @@
       setTimeout(function () { b.textContent = t; }, 2500);
     }
   });
+
+  // Gallery lightbox (native dialog element; silently inert where showModal is unsupported)
+  (function () {
+    var lb = document.getElementById('lightbox');
+    if (!lb || typeof lb.showModal !== 'function') return;
+    var shots = [].slice.call(document.querySelectorAll('.shots .shot'));
+    var fig = lb.querySelector('figure'), cap = lb.querySelector('figcaption');
+    var idx = 0, opener = null;
+
+    function clear() {
+      var m = fig.querySelector('img,video');
+      if (!m) return;
+      if (m.pause) { m.pause(); m.removeAttribute('src'); m.load(); }
+      m.remove();
+    }
+    function show(i) {
+      idx = (i + shots.length) % shots.length;
+      var src = shots[idx].querySelector('.phone img,.phone video'), m;
+      clear();
+      if (src.tagName === 'VIDEO') {
+        m = document.createElement('video');
+        ['controls', 'autoplay', 'muted', 'loop', 'playsinline'].forEach(function (a) { m.setAttribute(a, ''); });
+        m.muted = true;
+        m.setAttribute('poster', src.getAttribute('poster'));
+        m.setAttribute('aria-label', src.getAttribute('aria-label') || '');
+      } else {
+        m = document.createElement('img');
+        m.alt = src.alt;
+      }
+      m.setAttribute('src', src.getAttribute('src'));
+      fig.insertBefore(m, cap);
+      cap.innerHTML = shots[idx].querySelector('figcaption').innerHTML;
+    }
+    document.addEventListener('click', function (e) {
+      var ph = e.target.closest('.shots .phone');
+      if (!ph || e.target.tagName === 'VIDEO') return; // inline video controls stay inline
+      opener = e.target.closest('.zoom') || ph.querySelector('.zoom');
+      show(shots.indexOf(ph.closest('.shot')));
+      lb.showModal();
+    });
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb) return lb.close(); // backdrop click
+      var b = e.target.closest('button');
+      if (!b) return;
+      if (b.classList.contains('lb-x')) lb.close();
+      else show(idx + (b.classList.contains('lb-next') ? 1 : -1));
+    });
+    lb.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') show(idx + 1);
+      else if (e.key === 'ArrowLeft') show(idx - 1);
+    });
+    lb.addEventListener('close', function () {
+      clear();
+      if (opener) opener.focus();
+    });
+  })();
 </script>
 </body>
 </html>
