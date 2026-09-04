@@ -360,7 +360,7 @@
     <div class="wrap">
       <div class="hero">
         <div>
-          <span class="pill"><span class="dot" aria-hidden="true"></span>Windows 클라이언트 · v1.0.0</span>
+          <span class="pill"><span class="dot" aria-hidden="true"></span>Windows 클라이언트 · v1.0.1</span>
           <h1 id="hero-title">ShareLink</h1>
           <p class="tagline">폰 데이터를 PC로 — 무루팅 테더링</p>
           <div class="hero-cta">
@@ -370,7 +370,7 @@
             </a>
             <a class="btn btn-ghost btn-lg" href="#usage">사용법 보기</a>
           </div>
-          <p class="subline">Windows 10/11 · EV 서명(JCG Inc.) · v1.0.0</p>
+          <p class="subline">Windows 10/11 · EV 서명(JCG Inc.) · v1.0.1</p>
           <p class="subline"><a class="hero-alt" href="#download">📱 Android 앱(APK)도 내려받기 →</a></p>
         </div>
         <div class="tiles">
@@ -535,11 +535,11 @@
             ShareLink.exe 내려받기
           </a>
           <p class="url">github.com/<wbr>ssallem/<wbr>sharelink-app/<wbr>releases/<wbr>latest/<wbr>download/<wbr>ShareLink.exe</p>
-          <div class="meta"><span>Windows 10/11</span><span>EV 서명</span><span>v1.0.0</span></div>
+          <div class="meta"><span>Windows 10/11</span><span>EV 서명</span><span>v1.0.1</span></div>
 
           <div class="note n-violet">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
-            <span>실행하면 <strong>UAC(관리자) 권한으로 자동 승격</strong>되고, 이후 <strong>시스템 트레이에 상주</strong>합니다. 트레이 아이콘에서 모드 전환·종료가 가능합니다.</span>
+            <span>실행하면 <strong>UAC(관리자) 권한으로 자동 승격</strong>되고, 이후 <strong>시스템 트레이에 상주</strong>합니다. 트레이 아이콘에서 모드 전환·종료가 가능합니다. 폰 미연결 상태로 실행하면 트레이에서 대기하며 자동으로 연결합니다.</span>
           </div>
           <div class="note n-amber">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
@@ -557,7 +557,7 @@
             ShareLink.apk 내려받기
           </a>
           <p class="url">github.com/<wbr>ssallem/<wbr>sharelink-app/<wbr>releases/<wbr>latest/<wbr>download/<wbr>ShareLink.apk</p>
-          <div class="meta"><span>Android 7.0+</span><span>v0.2.0 베타</span><span>2.3 MB</span></div>
+          <div class="meta"><span>Android 7.0+</span><span>v0.2.1 베타</span><span>2.3 MB</span></div>
 
           <div class="note n-amber">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 3 20h18z"/><path d="M12 10v4M12 17h.01"/></svg>
@@ -679,7 +679,7 @@
       <ol class="steps">
         <li>
           <span class="st-title">폰에서 ShareLink 앱 실행 → 시작</span>
-          <span class="st-body"><strong>Wi-Fi 라디오 ON</strong>(어딘가에 연결할 필요는 없음) + <strong>모바일 데이터 ON</strong> 상태로 앱의 시작 버튼을 누릅니다.</span>
+          <span class="st-body"><strong>Wi-Fi 라디오 ON</strong>(어딘가에 연결할 필요는 없음) + <strong>모바일 데이터 ON</strong> 상태로 앱의 시작 버튼을 누릅니다. Wi-Fi가 꺼져 있으면 앱이 Wi-Fi 설정을 띄워 켜도록 안내합니다.</span>
         </li>
         <li>
           <span class="st-title">PC Wi-Fi를 폰 핫스팟에 연결</span>
@@ -752,8 +752,8 @@
           <div class="ans">PC에서 해당 Wi-Fi의 <strong>MAC 랜덤화(임의 하드웨어 주소)를 끄세요</strong>. 가장 흔한 원인입니다. 폰의 <strong>모바일 데이터가 켜져 있는지</strong>도 함께 확인하세요.</div>
         </details>
         <details>
-          <summary><span><code>192.168.49.1:8283</code>에 도달할 수 없다고 나와요</span></summary>
-          <div class="ans">폰의 <strong>ShareLink 앱이 “시작” 상태</strong>인지, PC가 <code>DIRECT-SL-…</code> Wi-Fi에 <strong>실제로 연결</strong>돼 있는지 확인하세요. 다른 Wi-Fi에 붙어 있으면 폰에 도달하지 못합니다.</div>
+          <summary><span>폰과 연결이 안 될 때 <code>ShareLink.exe</code>는 어떻게 동작하나요?</span></summary>
+          <div class="ans">v1.0.1부터는 폰이 연결되지 않아도 <code>ShareLink.exe</code>가 종료되지 않고 <strong>트레이에서 대기하며 3초마다 자동으로 연결을 시도</strong>합니다(트레이 아이콘 툴팁에 “폰 연결 대기 중”과 마지막 시도 시각 표시). 그동안 폰의 <strong>ShareLink 앱이 “시작” 상태</strong>인지, PC가 <code>DIRECT-SL-…</code> Wi-Fi에 <strong>실제로 연결</strong>돼 있는지 확인하세요. 다른 Wi-Fi에 붙어 있으면 폰에 도달하지 못합니다. 즉시 재시도하려면 트레이 메뉴의 <strong>“지금 연결 시도”</strong>를 누르세요.</div>
         </details>
         <details>
           <summary>비정상 종료 후 PC 인터넷이 끊겼어요</summary>
@@ -775,7 +775,7 @@
       <span class="mark"><svg role="img" aria-label="ShareLink 로고"><use href="#s-logo"/></svg></span>
       ShareLink
     </div>
-    <p>v1.0.0 · © JC Globeway</p>
+    <p>v1.0.1 · © JC Globeway</p>
     <p>오픈소스 고지: <a href="https://github.com/xjasonlyu/tun2socks" target="_blank" rel="noopener noreferrer"><code>tun2socks</code></a> (xjasonlyu, MIT), <a href="https://www.wintun.net" target="_blank" rel="noopener noreferrer"><code>wintun</code></a> (WireGuard, Prebuilt Binaries License). 각 프로젝트의 라이선스를 따릅니다.</p>
     <p><a href="https://github.com/ssallem" target="_blank" rel="noopener noreferrer">GitHub</a></p>
     <span class="fpill"><span class="dot" aria-hidden="true"></span>ShareLink · No-root tethering</span>
