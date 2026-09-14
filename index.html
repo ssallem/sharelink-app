@@ -190,6 +190,8 @@
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat}
   .faq details[open] summary::after{transform:rotate(180deg)}
   .ans{padding:0 16px 20px;color:var(--sub);font-size:.95rem}
+  .ans ol{margin:10px 0 0;padding-left:20px}
+  .ans ol li{margin:4px 0}
 
   /* ---------- Footer ---------- */
   .foot{padding:var(--gap) 0 64px;text-align:center;color:var(--muted);font-size:.9rem}
@@ -557,7 +559,7 @@
             ShareLink.apk 내려받기
           </a>
           <p class="url">github.com/<wbr>ssallem/<wbr>sharelink-app/<wbr>releases/<wbr>latest/<wbr>download/<wbr>ShareLink.apk</p>
-          <div class="meta"><span>Android 7.0+</span><span>v0.2.1 베타</span><span>2.3 MB</span></div>
+          <div class="meta"><span>Android 7.0+</span><span>v0.3.0 베타</span><span>2.3 MB</span></div>
 
           <div class="note n-amber">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 3 20h18z"/><path d="M12 10v4M12 17h.01"/></svg>
@@ -583,7 +585,7 @@
         <article class="card mode">
           <span class="badge m1">Mode 1 · 프록시</span>
           <h3>프록시 (간단, 설치 0)</h3>
-          <p>PC의 Windows 프록시 설정에 아래 값을 넣으면, 브라우저와 프록시를 지원하는 앱이 폰 데이터로 연결됩니다.</p>
+          <p>PC(Windows 프록시 설정) 또는 다른 안드로이드 기기(Wi-Fi 프록시 수동 설정)에 아래 값을 넣으면, 브라우저와 프록시를 지원하는 앱이 폰 데이터로 연결됩니다. 안드로이드 설정 방법은 <a href="#faq">문제해결</a>을 참고하세요.</p>
           <div class="addr">
             <div>
               <span class="lbl">HTTP 프록시</span>
@@ -684,7 +686,7 @@
         </li>
         <li>
           <span class="st-title">PC Wi-Fi를 폰 핫스팟에 연결</span>
-          <span class="st-body">PC에서 <code>DIRECT-SL-…</code> 로 시작하는 Wi-Fi에 연결합니다. 암호는 <strong>앱 화면에 표시된 암호</strong>를 입력하세요. (“인터넷 없음” 표시는 정상입니다.)</span>
+          <span class="st-body">PC에서 <code>DIRECT-SL-…</code> 로 시작하는 Wi-Fi에 연결합니다. 암호는 <strong>앱 화면에 표시된 암호</strong>를 입력하세요. (“인터넷 없음” 표시는 정상입니다.) 안드로이드 세컨폰도 같은 Wi-Fi에 연결합니다(프록시 설정은 <a href="#faq">문제해결</a> 참고).</span>
         </li>
         <li class="tip">
           <span class="st-title">연결됐는데 인터넷이 안 되면: MAC 랜덤화 끄기</span>
@@ -728,7 +730,7 @@
             </tr>
             <tr>
               <th scope="row">Android</th>
-              <td><span class="warn">⚠️ 예정</span> (VpnService)</td>
+              <td><span class="yes">✅</span> Wi-Fi 프록시 수동 설정 · 제한적 (<a href="#faq">문제해결</a>)<br><span class="warn">⚠️ 예정</span> 전체 터널 앱 (VpnService)</td>
               <td><span class="yes">✅</span> <a href="#download">현행 앱</a></td>
             </tr>
             <tr>
@@ -751,6 +753,25 @@
         <details>
           <summary>연결은 되는데 인터넷이 안 돼요</summary>
           <div class="ans">PC에서 해당 Wi-Fi의 <strong>MAC 랜덤화(임의 하드웨어 주소)를 끄세요</strong>. 가장 흔한 원인입니다. 폰의 <strong>모바일 데이터가 켜져 있는지</strong>도 함께 확인하세요.</div>
+        </details>
+        <details>
+          <summary>안드로이드 폰·태블릿(세컨폰)도 연결할 수 있나요?</summary>
+          <div class="ans">가능합니다. <strong>세컨폰용 클라이언트 앱은 아직 없고</strong>, 세컨폰의 <strong>Wi-Fi 프록시를 수동 설정</strong>하는 방식입니다.
+            <ol>
+              <li>세컨폰 Wi-Fi에서 <code>DIRECT-SL-…</code>에 연결합니다. 암호는 호스트 폰의 앱 화면에 있습니다.</li>
+              <li>연결된 네트워크를 길게 누르거나 ⚙을 눌러 <strong>수정 → 고급 옵션</strong>으로 들어갑니다(메뉴 이름은 기종마다 다를 수 있음).</li>
+              <li><strong>프록시 → 수동</strong>을 선택하고 호스트 이름 <code>192.168.49.1</code>, 포트 <code>8282</code>를 넣고 저장합니다.</li>
+              <li>브라우저를 열어 인터넷이 되는지 확인합니다.</li>
+            </ol>
+            <div class="addr">
+              <div>
+                <span class="lbl">HTTP 프록시</span>
+                <span class="ep">호스트 이름 <span class="val">192.168.49.1</span> · 포트 <span class="val">8282</span></span>
+              </div>
+              <button class="copy" type="button" data-copy="192.168.49.1:8282">복사</button>
+            </div>
+            <p>안드로이드 시스템 프록시는 <strong>HTTP 프록시 방식만</strong> 지원합니다(HTTPS 사이트도 이 방식으로 정상 동작, SOCKS5 8283은 앱이 직접 지원할 때만). 프록시를 무시하는 일부 앱은 통신되지 않으며, 전체 터널용 클라이언트 앱(VpnService)은 개발 예정입니다.</p>
+          </div>
         </details>
         <details>
           <summary><span>폰과 연결이 안 될 때 <code>ShareLink.exe</code>는 어떻게 동작하나요?</span></summary>
